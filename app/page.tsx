@@ -1018,15 +1018,19 @@ export default function Home() {
       setMintingStatus("Mint successful! 🎉🎉");
 
       triggerSuccessEffects();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("❌ Error during whitelist mint:", error);
 
-      if (error.message.includes("ExceedsWhitelistSupply")) {
-        alert("❌ Transaction failed: Not enough whitelist supply left!");
-      } else if (error.message.includes("InsufficientPayment")) {
-        alert("❌ Transaction failed: Not enough ETH sent.");
+      if (error instanceof Error) {
+        if (error.message.includes("ExceedsWhitelistSupply")) {
+          alert("❌ Transaction failed: Not enough whitelist supply left!");
+        } else if (error.message.includes("InsufficientPayment")) {
+          alert("❌ Transaction failed: Not enough ETH sent.");
+        } else {
+          alert("❌ Transaction failed. Please check the console for details.");
+        }
       } else {
-        alert("❌ Transaction failed. Please check the console for details.");
+        alert("❌ An unknown error occurred.");
       }
 
       setMintingStatus("Mint failed.");
@@ -1146,17 +1150,21 @@ export default function Home() {
       );
 
       triggerSuccessEffects();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("❌ Public mint failed:", error);
 
-      if (error.message.includes("NotEnoughPublicSupply")) {
-        alert("❌ Transaction failed: Not enough NFTs left.");
-      } else if (error.message.includes("InsufficientETH")) {
-        alert("❌ Transaction failed: You did not send enough ETH.");
-      } else if (error.message.includes("SelfReferralNotAllowed")) {
-        alert("❌ Transaction failed: You cannot refer yourself.");
+      if (error instanceof Error) {
+        if (error.message.includes("NotEnoughPublicSupply")) {
+          alert("❌ Transaction failed: Not enough NFTs left.");
+        } else if (error.message.includes("InsufficientETH")) {
+          alert("❌ Transaction failed: You did not send enough ETH.");
+        } else if (error.message.includes("SelfReferralNotAllowed")) {
+          alert("❌ Transaction failed: You cannot refer yourself.");
+        } else {
+          alert("❌ Transaction failed. Please check the console for details.");
+        }
       } else {
-        alert("❌ Transaction failed. Please check the console for details.");
+        alert("❌ An unknown error occurred.");
       }
 
       setMintingStatus("❌ Public Mint Failed. Try Again.");
